@@ -1,9 +1,9 @@
 from typing import TYPE_CHECKING
 from .abc import MixinMeta
 
-if TYPE_CHECKING:
-    import discord
-    
+#if TYPE_CHECKING:
+#    import discord
+import discord    
 import random
 from datetime import datetime, timedelta
 
