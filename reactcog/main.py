@@ -51,8 +51,8 @@ class ReactEmoji(EventMixin, commands.Cog, metaclass=CompositeClass):
 
         await ctx.send(", ".join(f"`{website}`" for website in websites))
     
-    @_list.command()
-    async def extensions(self, ctx: commands.Context) -> None:
+    @_list.command(name="extensions")
+    async def _extensions(self, ctx: commands.Context) -> None:
         """Get the extensions for the current guild."""
         if not (extensions := await self.config.guild(ctx.guild).extensions()):
             await ctx.send("There's no extension for that channel.")
