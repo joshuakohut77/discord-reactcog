@@ -44,8 +44,8 @@ class ReactEmoji(EventMixin, commands.Cog, metaclass=CompositeClass):
 
     @_list.command()
     async def websites(self, ctx: commands.Context) -> None:
-        """Get the websites links for the current channel."""
-        if not (websites := await self.config.channel(ctx.channel).websites()):
+        """Get the websites links for the current guild."""
+        if not (websites := await self.config.guild(ctx.guild).websites()):
             await ctx.send("There's no website for that channel.")
             return
 
@@ -53,8 +53,8 @@ class ReactEmoji(EventMixin, commands.Cog, metaclass=CompositeClass):
     
     @_list.command()
     async def extensions(self, ctx: commands.Context) -> None:
-        """Get the extensions for the current channel."""
-        if not (extensions := await self.config.channel(ctx.channel).extensions()):
+        """Get the extensions for the current guild."""
+        if not (extensions := await self.config.guild(ctx.guild).extensions()):
             await ctx.send("There's no extension for that channel.")
             return
 
