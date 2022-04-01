@@ -36,6 +36,39 @@ class ReactEmoji(EventMixin, commands.Cog, metaclass=CompositeClass):
         self.config.register_channel(**default_channel)
         self.config.register_guild(**default_guild)
 
+    @commands.group(name="list")
+    @commands.guild_only()
+    async def _list(self, ctx: commands.Context) -> None:
+        """List emojis, extensions or websites for the current channel."""
+        pass
+
+    @_list.command()
+    async def websites(self, ctx: commands.Context) -> None:
+        """Get the websites links for the current channel."""
+        if not (websites := await self.config.channel(ctx.channel).websites()):
+            await ctx.send("There's no website for that channel.")
+            return
+
+        await ctx.send(", ".join(f"`{website}`" for website in websites))
+    
+    @_list.command()
+    async def extensions(self, ctx: commands.Context) -> None:
+        """Get the extensions for the current channel."""
+        if not (extensions := await self.config.channel(ctx.channel).extensions()):
+            await ctx.send("There's no extension for that channel.")
+            return
+
+        await ctx.send(", ".join(f"`{extension}`" for extension in extensions))
+
+    @_list.command(name="emojis")
+    async def _emojis(self, ctx: commands.Context) -> None:
+        """Get the emojis for the current channel."""
+        if not (emojis := await self.config.channel(ctx.channel).emojis()):
+            await ctx.send("There's no emoji for that channel.")
+            return
+
+        await ctx.send(", ".join(f"`{emoji}`" for emoji in emojis))
+
     @commands.group()
     @commands.mod_or_permissions()
     @commands.guild_only()

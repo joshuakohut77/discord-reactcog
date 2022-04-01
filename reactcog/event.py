@@ -1,9 +1,10 @@
+from __future__ import annotations
 from typing import TYPE_CHECKING
 from .abc import MixinMeta
 
-#if TYPE_CHECKING:
-#    import discord
-import discord    
+if TYPE_CHECKING:
+    import discord
+    
 import random
 from datetime import datetime, timedelta
 
@@ -24,8 +25,13 @@ class EventMixin(MixinMeta):
         if not config[message.channel.id]["enabled"]:
             return
 
-        websites: dict = await self.config.guild(message.guild).websites()
-        extensions: dict = await self.config.guild(message.guild).extensions()
+        guild_conf: dict = await self.config.guild(message.guild).get_raw()
+        extensions: list = guild_conf["extensions"]
+        websites: list = guild_conf["websites"]
+
+        if not extensions and not websites:
+            return
+
         msg: str = message.content.lower()
         if all(
             (not any((ext for ext in extensions if msg.endswith(ext))),
