@@ -1,11 +1,10 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 from .abc import MixinMeta
-
-if TYPE_CHECKING:
-    import discord
     
 import random
+import discord
+
 from datetime import datetime, timedelta
 
 from redbot.core import commands
@@ -48,7 +47,14 @@ class EventMixin(MixinMeta):
             finally:
                 try:
                     await message.add_reaction(emoji)
-                except:
+                except discord.HTTPException:
+                    await message.channel.send("Error while trying to add the emoji.")
+                    return
+                except discord.Forbidden:
+                    await message.channel.send("I don't have the permissions to add a reaction")
+                    return
+                except discord.NotFound:
                     await message.channel.send("Didn't add the emoji, couldn't find it.")
+                    return
                 new_time: datetime = datetime.utcnow() + timedelta(minutes=random.randint(1, config[message.channel.id]["frequency"]))
                 await self.config.channel(message.channel).set_raw("next_react_time", value=new_time.timestamp())
