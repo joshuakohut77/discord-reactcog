@@ -49,6 +49,6 @@ class EventMixin(MixinMeta):
                 try:
                     await message.add_reaction(emoji)
                 except:
-                    print("Didn't add the emoji, couldn't find it.")
+                    await message.channel.send("Didn't add the emoji, couldn't find it.")
                 new_time: datetime = datetime.utcnow() + timedelta(minutes=random.randint(1, config[message.channel.id]["frequency"]))
                 await self.config.channel(message.channel).set_raw("next_react_time", value=new_time.timestamp())
