@@ -1,5 +1,4 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING
 from .abc import MixinMeta
     
 import random
@@ -39,9 +38,9 @@ class EventMixin(MixinMeta):
             return
 
         if datetime.utcnow().timestamp() >= config[message.channel.id]["next_react_time"] and random.randint(1, 100) <= config[message.channel.id]["multiplier"]:
-            emoji: str = random.choice(config[message.channel.id]["emojis"])
+            emoji: str | int = random.choice(config[message.channel.id]["emojis"])
             try:
-                emoji: discord.Emoji = await commands.EmojiConverter().convert(ctx=await self.bot.get_context(message), argument=emoji)
+                emoji: discord.Emoji = await commands.EmojiConverter().convert(ctx=await self.bot.get_context(message), argument=str(emoji))
             except:
                 emoji: str = emoji
             finally:
@@ -49,9 +48,12 @@ class EventMixin(MixinMeta):
                     await message.add_reaction(emoji)
                 except discord.Forbidden:
                     await message.channel.send("I don't have the permissions to add a reaction")
+                    return
                 except discord.NotFound:
                     await message.channel.send("Didn't add the emoji, couldn't find it.")
+                    return
                 except discord.HTTPException:
                     await message.channel.send("Error while trying to add the emoji.")
+                    return
                 new_time: datetime = datetime.utcnow() + timedelta(minutes=random.randint(1, config[message.channel.id]["frequency"]))
                 await self.config.channel(message.channel).set_raw("next_react_time", value=new_time.timestamp())
