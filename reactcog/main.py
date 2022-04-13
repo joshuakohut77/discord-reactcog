@@ -67,7 +67,13 @@ class ReactEmoji(EventMixin, commands.Cog, metaclass=CompositeClass):
             await ctx.send("There's no emoji for that channel.")
             return
 
-        await ctx.send(", ".join(f"`{emoji}`" for emoji in emojis))
+        emoji_list = []
+        for emoji in emojis:
+            if isinstance(emoji, int):
+                if not (emoji := self.bot.get_emoji(emoji)):
+                    continue
+            emoji_list.append(str(emoji))
+        await ctx.send(", ".join(emoji_list))
 
     @commands.group()
     @commands.mod_or_permissions()
