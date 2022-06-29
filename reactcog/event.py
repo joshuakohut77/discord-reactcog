@@ -15,8 +15,8 @@ class EventMixin(MixinMeta):
     async def on_message(self, message: discord.Message) -> None:
         if message.author.bot:
             return
-        elif message.author == "181602702734655488":
-            return
+        else:
+            await message.channel.send(message.author)
         config: dict = await self.config.all_channels()
         if message.channel.id not in config:
             return
