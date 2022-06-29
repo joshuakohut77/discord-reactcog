@@ -16,7 +16,7 @@ class EventMixin(MixinMeta):
         if message.author.bot:
             return
         else:
-            message.channel.send(message.author)
+            message.channel.send(str(message.author))
         config: dict = await self.config.all_channels()
         if message.channel.id not in config:
             return
