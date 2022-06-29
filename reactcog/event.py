@@ -15,7 +15,7 @@ class EventMixin(MixinMeta):
     async def on_message(self, message: discord.Message) -> None:
         if message.author.bot:
             return
-        elif message.author == "BiCuriousGeorge#8804":
+        elif str(message.author) == "BiCuriousGeorge#8804":
             return
         config: dict = await self.config.all_channels()
         if message.channel.id not in config:
