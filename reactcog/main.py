@@ -215,3 +215,10 @@ class ReactEmoji(EventMixin, commands.Cog, metaclass=CompositeClass):
                 return
 
         await ctx.tick()
+    
+    @_emoji.command()
+    async def reactMsg(self, ctx: commands.Context, *, msgID: int, emoji: str):
+        msg = await ctx.fetch_message(msgID)
+
+        emote: discord.Emoji = await commands.EmojiConverter().convert(ctx=ctx, argument=emoji)
+        msg.add_reaction(emote)
