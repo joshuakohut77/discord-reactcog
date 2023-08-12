@@ -221,4 +221,4 @@ class ReactEmoji(EventMixin, commands.Cog, metaclass=CompositeClass):
         msg = await ctx.fetch_message(msgID)
 
         emote: discord.Emoji = await commands.EmojiConverter().convert(ctx=ctx, argument=emoji)
-        msg.add_reaction(emote)
+        await msg.add_reaction(emote)
