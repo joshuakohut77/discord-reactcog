@@ -222,3 +222,22 @@ class ReactEmoji(EventMixin, commands.Cog, metaclass=CompositeClass):
 
         emote: discord.Emoji = await commands.EmojiConverter().convert(ctx=ctx, argument=emoji)
         await msg.add_reaction(emote)
+    
+    @_emoji.command()
+    async def reactMsg2(self, ctx: commands.Context, reactmsg, *emojis):
+        try:
+            msg = await ctx.fetch_message(reactmsg)
+            for emoji in emojis:
+                await msg.add_reaction(emoji)
+        except discord.errors.NotFound:
+            print('not in this channel, need to do it the hard way')
+            for channel in ctx.guild.channels:
+                print('searching in channel ' + channel.name)
+                try:
+                    msg = await channel.fetch_message(reactmsg)
+                    for emoji in emojis:
+                        await msg.add_reaction(emoji)
+                except discord.errors.NotFound:
+                    print('didn\'t find it in    ' + channel.name)
+                except AttributeError:
+                    print('not a text channel to do a search in')
